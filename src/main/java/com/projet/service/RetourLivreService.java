@@ -1,5 +1,6 @@
 package com.projet.service;
 
+import com.projet.entity.Pret;
 import com.projet.entity.RetourLivre;
 import com.projet.repository.RetourLivreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,5 +24,10 @@ public class RetourLivreService {
     }
     public void deleteById(int id) {
         retourLivreRepository.deleteById(id);
+    }
+
+    public RetourLivre findByPret(Pret pret) 
+    {
+        return retourLivreRepository.findByPret(pret);
     }
 }
