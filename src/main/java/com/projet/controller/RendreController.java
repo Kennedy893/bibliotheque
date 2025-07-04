@@ -62,8 +62,19 @@ public class RendreController
             return "rendre/home";
         }
 
-        // Récupération du prêt
-        Pret pret = pretService.findById(idPret).orElse(null);
+        // Recuperation du prêt avec toutes les relations necessaires
+        Pret pret = pretService.findByIdWithAdherentAndTypeAdherent(idPret);
+
+        // REGLES DE GESTION
+        RetourLivre retourLivre = rendreService.findByPret(pret);
+        if (retourLivre != null) 
+        {
+            model.addAttribute("message", "Le livre a dejà ete rendu.");
+            model.addAttribute("messageType", "error");
+            model.addAttribute("listePrets", pretService.findAllWithAdherentAndExemplaireAndLivre());
+            return "rendre/home";
+        }
+
         if (pret == null) 
         {
             model.addAttribute("message", "Prêt introuvable");
@@ -76,14 +87,23 @@ public class RendreController
         Date retourPrevu = pret.getDate_retour_prevu();
         if (retourPrevu.before(dateRetourDate)) 
         {
-            int joursRetard = (int) ((dateRetourDate.getTime() - retourPrevu.getTime()) / (1000 * 60 * 60 * 24));
-            model.addAttribute("message", "Le retour du livre est retarde de " + joursRetard + " jour(s).");
+            HistoriquesPenalisation dernierePenalisation = historiqueService.findByAdherentId(pret.getAdherent().getId()).orElse(null);
+            int surplus_jours = 0;
+            if (dernierePenalisation != null && dernierePenalisation.getDate_fin().after(dateRetourDate)) 
+            {
+                // raha aoriananle penalisation vaovao ny faranle taloha
+                surplus_jours = (int) ((dernierePenalisation.getDate_fin().getTime() - dateRetourDate.getTime()) / (1000 * 60 * 60 * 24));
+            }
 
+            int joursRetard = (int) ((dateRetourDate.getTime() - retourPrevu.getTime()) / (1000 * 60 * 60 * 24));
+            model.addAttribute("alerte", "Le retour du livre est retarde de " + joursRetard + " jour(s).");
+ 
             HistoriquesPenalisation penalisation = new HistoriquesPenalisation();
             penalisation.setAdherent(pret.getAdherent());
             penalisation.setDate_debut(dateRetourDate);
-            long dateFinMillis = dateRetourDate.getTime() + (joursRetard * 24L * 60 * 60 * 1000); // miampy anle jours de retard
-            penalisation.setDate_fin(new Date(dateFinMillis)); 
+            long dateFinMillis = dateRetourDate.getTime() + (joursRetard * 24L * 60 * 60 * 1000) + (surplus_jours * 24L * 60 * 60 * 1000); // miampy anle jours de retard
+            Date current_fin = new Date(dateFinMillis);
+            penalisation.setDate_fin(current_fin); 
             historiqueService.save(penalisation);
         }
 
@@ -108,7 +128,7 @@ public class RendreController
         rendre.setDate_retour(dateRetourDate);
         rendreService.save(rendre);
 
-        model.addAttribute("message", "Retour enregistré avec succès");
+        model.addAttribute("message", "Retour enregistre avec succes! ");
         model.addAttribute("messageType", "success");
         model.addAttribute("listePrets", pretService.findAllWithAdherentAndExemplaireAndLivre());
         return "rendre/home";

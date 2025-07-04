@@ -29,4 +29,8 @@ public class PretService {
     {
         return pretRepository.findAllWithAdherentAndExemplaireAndLivre();
     }
+    public Pret findByIdWithAdherentAndTypeAdherent(int id) 
+    {
+        return pretRepository.findByIdWithAdherentAndTypeAdherent(id);
+    }
 }
