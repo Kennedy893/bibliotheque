@@ -101,6 +101,14 @@ public class ProlongerController
             return "/prolonger/home";
         }
         pretService.updateDateRetourPrevuById(idPret, newRetour);
+
+        // Update du statut du pret
+        StatutPret statutPret = statutPretService.findByPret(pret);
+        statutPret.setDaty(dateProl);
+        statutPret.setStatut(2); // 2: Prolongé
+        statutPret.setPret(pret);
+        statutPretService.save(statutPret);
+
         model.addAttribute("message", "Pret prolonge avec succes");
         model.addAttribute("messageType", "success");
 

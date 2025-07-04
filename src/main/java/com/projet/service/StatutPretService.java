@@ -1,5 +1,6 @@
 package com.projet.service;
 
+import com.projet.entity.Pret;
 import com.projet.entity.StatutPret;
 import com.projet.repository.StatutPretRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,5 +24,10 @@ public class StatutPretService {
     }
     public void deleteById(int id) {
         statutPretRepository.deleteById(id);
+    }
+
+    public StatutPret findByPret(Pret pret) 
+    {
+        return statutPretRepository.findByPret(pret);
     }
 }
