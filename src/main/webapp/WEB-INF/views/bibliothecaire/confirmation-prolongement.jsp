@@ -8,13 +8,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spring MVC - Accueil</title>
+    <title>Confirmation du prolongement</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/hello.css">
 </head>
 <body>
     <h2>Confirmation du prolongement</h2>
 
-    <form action="${pageContext.request.contextPath}/prolonger/confirmation" method="post">
+    <form action="${pageContext.request.contextPath}/prolonger/confirmation" method="get">
         <label>ID du pret a prolonger :</label>
         <input type="number" value="${id_pret}" name="id_pret"/><br/>
 

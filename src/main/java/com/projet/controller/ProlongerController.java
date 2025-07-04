@@ -47,23 +47,29 @@ public class ProlongerController
     public String stockParams(
         @RequestParam("id_pret") int idPret,
         @RequestParam("surplus_jours") int surplusJours,
-        Model model
+        Model model,
+        jakarta.servlet.http.HttpSession session
     )
     {
-        model.addAttribute("id_pret", idPret);
-        model.addAttribute("surplus_jours", surplusJours);
+        // model.addAttribute("id_pret", idPret);
+        // model.addAttribute("surplus_jours", surplusJours);
+        session.setAttribute("id_pret", idPret);
+        session.setAttribute("surplus_jours", surplusJours);
         model.addAttribute("listePrets", pretService.findAllWithAdherentAndExemplaireAndLivre());
-        return "bibliothecaire/confirmation-prolongement";
+        return "login-bibliothecaire";
     }
 
-    @PostMapping("/confirmation")
+    @GetMapping("/confirmation")
     public String confirmation(
-        @RequestParam("id_pret") int idPret,
-        @RequestParam("surplus") int surplusJours,
+        // @RequestParam("id_pret") int idPret,
+        // @RequestParam("surplus") int surplusJours,
         @RequestParam("daty") String date_prolongement,
-        Model model
+        Model model,
+        jakarta.servlet.http.HttpSession session
     )
     {
+        Integer idPret = (Integer) session.getAttribute("id_pret");
+        Integer surplusJours = (Integer) session.getAttribute("surplus_jours");
         Pret pret = pretService.findByIdWithAdherentAndTypeAdherent(idPret);
         // Conversion en Date
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");

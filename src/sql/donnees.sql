@@ -1,6 +1,6 @@
 -- Données pour la table admin
-INSERT INTO admin (pseudo, mdp) VALUES ('admin1', 'adminpass');
-INSERT INTO admin (pseudo, mdp) VALUES ('superadmin', 'superpass');
+INSERT INTO admin (pseudo, mdp) VALUES ('admin1', '123');
+INSERT INTO admin (pseudo, mdp) VALUES ('admin2', '123');
 
 -- Données pour la table type_adherent
 INSERT INTO type_adherent (type_adherent, quota) VALUES ('Etudiant', 5);
@@ -51,3 +51,5 @@ INSERT INTO livre_typeadherent (id_livre, id_type_adherent) VALUES (3, 3); -- Le
 INSERT INTO livre_typeadherent (id_livre, id_type_adherent) VALUES (4, 1); -- Steve Jobs, Etudiant
 
 
+-- Vider les tables (désactiver les contraintes si besoin)
+TRUNCATE TABLE retour_livre, prolongement, statut_quota, statut_pret, historiques_penalisation, pret, exemplaire, livre_genre, livre_typeadherent, livre, genre, type_adherent, adherent, bibliothecaire, admin RESTART IDENTITY CASCADE;
