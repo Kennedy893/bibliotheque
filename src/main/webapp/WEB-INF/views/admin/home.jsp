@@ -7,6 +7,6 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/hello.css">
 </head>
 <body>
-    <h2>Bienvenue ADMIN</h2>
+    <h2>Accueil ADMIN</h2>
 </body>
 </html>

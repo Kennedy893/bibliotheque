@@ -10,6 +10,7 @@
     <h2>Bienvenue BIBLIOTHECAIRE</h2>
     <a href="${pageContext.request.contextPath}/login/inscription">Inscription</a>
     <a href="${pageContext.request.contextPath}/preter/home">Enregistrement d'un pret</a>
-    <a href="${pageContext.request.contextPath}/rendre/home">Rendre un pret</a>
+    <a href="${pageContext.request.contextPath}/rendre/home">Rendre un livre</a>
+    <a href="${pageContext.request.contextPath}/bibliothecaire/confirmation">Confirmer un prolongement de pret</a>
 </body>
 </html>

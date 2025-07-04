@@ -8,5 +8,6 @@
 </head>
 <body>
     <h2>Bienvenue ADHERENT</h2>
+    <a href="${pageContext.request.contextPath}/prolonger/home">Prolonger un pret</a>
 </body>
 </html>

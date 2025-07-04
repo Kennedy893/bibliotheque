@@ -4,6 +4,8 @@ import com.projet.entity.Pret;
 import com.projet.repository.PretRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,5 +34,18 @@ public class PretService {
     public Pret findByIdWithAdherentAndTypeAdherent(int id) 
     {
         return pretRepository.findByIdWithAdherentAndTypeAdherent(id);
+    }
+
+    public Pret updateDateRetourPrevuById(int id, Date newDateRetourPrevu) 
+    {
+        Optional<Pret> optionalPret = pretRepository.findById(id);
+        if (optionalPret.isPresent()) 
+        {
+            Pret pret = optionalPret.get();
+            pret.setDate_retour_prevu(newDateRetourPrevu);
+            return pretRepository.save(pret);
+        } else {
+            throw new RuntimeException("Pret not found with id: " + id);
+        }
     }
 }

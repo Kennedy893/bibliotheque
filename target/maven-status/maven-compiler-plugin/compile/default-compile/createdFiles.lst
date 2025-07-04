@@ -30,6 +30,7 @@ com\projet\service\LivreTypeAdherentService.class
 com\projet\controller\AdminController.class
 com\projet\repository\PretRepository.class
 com\projet\service\AdminService.class
+com\projet\controller\ProlongerController.class
 com\projet\entity\Reservation.class
 com\projet\repository\LivreRepository.class
 com\projet\service\LivreService.class

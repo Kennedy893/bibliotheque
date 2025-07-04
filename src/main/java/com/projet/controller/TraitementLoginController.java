@@ -61,6 +61,8 @@ public class TraitementLoginController
         Model model
     ) 
     {
+        Integer idPret = (Integer) session.getAttribute("id_pret");
+        Integer surplusJours = (Integer) session.getAttribute("surplus_jours");
         Bibliothecaire bibliothecaire = bibliothecaireService.findByPseudoAndMdp(pseudo, mdp);
         if (bibliothecaire != null) 
         {
