@@ -47,6 +47,13 @@ public class PreterController
         return "preter/home";
     }
 
+    @GetMapping("/all")
+    public String allPrets(Model model) 
+    {
+        model.addAttribute("listePrets", pretService.findAllWithAdherentAndExemplaireAndLivre());
+        return "preter/liste";
+    }
+
     @PostMapping("/save")
     public String savePret(
         @RequestParam("id_exemplaire") int idExemplaire,

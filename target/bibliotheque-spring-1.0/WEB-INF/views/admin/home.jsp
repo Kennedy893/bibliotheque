@@ -8,5 +8,6 @@
 </head>
 <body>
     <h2>Accueil ADMIN</h2>
+    <a href="${pageContext.request.contextPath}/preter/all">Liste de tous les prets</a>
 </body>
 </html>
