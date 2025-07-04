@@ -52,6 +52,7 @@ public class ProlongerController
     {
         model.addAttribute("id_pret", idPret);
         model.addAttribute("surplus_jours", surplusJours);
+        model.addAttribute("listePrets", pretService.findAllWithAdherentAndExemplaireAndLivre());
         return "bibliothecaire/confirmation-prolongement";
     }
 
@@ -84,8 +85,15 @@ public class ProlongerController
         prolongementService.save(prolongement);
 
         // Update de la date retour dans PRET
-        long millisRetour = dateProl.getTime() + (surplusJours * 24L * 60 * 60 * 1000);
+        Date dateRetourPrevu = pret.getDate_retour_prevu();
+        long millisRetour = dateRetourPrevu.getTime() + (surplusJours * 24L * 60 * 60 * 1000);
         Date newRetour = new Date(millisRetour);
+        if (newRetour.before(dateProl))
+        {
+            model.addAttribute("message", "La date de l'action doit etre avant la nouvelle date de retour");
+            model.addAttribute("messageType", "error");
+            return "/prolonger/home";
+        }
         pretService.updateDateRetourPrevuById(idPret, newRetour);
         model.addAttribute("message", "Pret prolonge avec succes");
         model.addAttribute("messageType", "success");

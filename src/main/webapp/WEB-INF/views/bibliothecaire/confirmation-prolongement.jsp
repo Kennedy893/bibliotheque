@@ -26,5 +26,29 @@
 
         <button type="submit">Confirmer le prolongement</button>
     </form>
+
+    <h3>Liste des prets</h3>
+    <table width="100" border="1">
+        <thead>
+            <tr>
+                <th>ID Pret</th>
+                <th>Nom de l'adherent</th>
+                <th>Titre de l'exemplaire</th>
+                <th>Date de pret</th>
+                <th>Date de retour prevu</th>
+            </tr>
+        </thead>
+        <tbody>
+            <c:forEach items="${listePrets}" var="pret">
+                <tr>
+                    <td>${pret.id}</td>
+                    <td>${pret.adherent.nom}</td>
+                    <td>${pret.exemplaire.livre.titre}</td>
+                    <td>${pret.date_pret}</td>
+                    <td>${pret.date_retour_prevu}</td>
+                </tr>
+            </c:forEach>
+        </tbody>
+    </table>
 </body>
 </html>

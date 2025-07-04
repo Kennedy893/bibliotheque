@@ -39,7 +39,8 @@ public class PretService {
     public Pret updateDateRetourPrevuById(int id, Date newDateRetourPrevu) 
     {
         Optional<Pret> optionalPret = pretRepository.findById(id);
-        if (optionalPret.isPresent()) {
+        if (optionalPret.isPresent()) 
+        {
             Pret pret = optionalPret.get();
             pret.setDate_retour_prevu(newDateRetourPrevu);
             return pretRepository.save(pret);
