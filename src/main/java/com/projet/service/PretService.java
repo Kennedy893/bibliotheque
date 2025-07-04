@@ -48,4 +48,10 @@ public class PretService {
             throw new RuntimeException("Pret not found with id: " + id);
         }
     }
+
+    public List<Pret> filtrerPrets(String mot) 
+    {
+        // Exemple simple : filtrer par nom d’adhérent ou titre du livre
+        return pretRepository.searchWithAdherentAndExemplaireAndLivre(mot);
+    }
 }

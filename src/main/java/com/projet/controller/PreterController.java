@@ -54,6 +54,15 @@ public class PreterController
         return "preter/liste";
     }
 
+    @GetMapping("/filtre")
+    public String filtrerPrets(@RequestParam("mot") String mot, Model model) 
+    {
+        List<Pret> pretsFiltres = pretService.filtrerPrets(mot); // À implémenter dans le service
+        model.addAttribute("listePrets", pretsFiltres);
+        return "preter/liste";
+    }
+
+
     @PostMapping("/save")
     public String savePret(
         @RequestParam("id_exemplaire") int idExemplaire,
