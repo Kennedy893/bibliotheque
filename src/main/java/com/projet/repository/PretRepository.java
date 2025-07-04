@@ -14,4 +14,8 @@ public interface PretRepository extends JpaRepository<Pret, Integer> {
 
     @Query("SELECT p FROM Pret p JOIN FETCH p.adherent a JOIN FETCH a.type_adherent WHERE p.id = :id")
     Pret findByIdWithAdherentAndTypeAdherent(@Param("id") int id);
+
+    @org.springframework.data.jpa.repository.Modifying
+    @org.springframework.data.jpa.repository.Query("UPDATE Pret p SET p.date_retour_prevu = :dateRetourPrevu WHERE p.id = :id")
+    void updateDateRetourPrevuById(@org.springframework.data.repository.query.Param("id") int id, @org.springframework.data.repository.query.Param("dateRetourPrevu") java.util.Date dateRetourPrevu);
 }

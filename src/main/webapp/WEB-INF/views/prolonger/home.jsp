@@ -15,15 +15,12 @@
     <c:if test="${not empty message}">
         <div class="${messageType == 'error' ? 'alert-danger' : 'alert-success'}">
             ${message}
-            <c:if test="${not empty alerte}">
-                ${alerte}
-            </c:if>
         </div>
     </c:if>
 
     <h2>Prolonger un pret</h2>
 
-    <form action="${pageContext.request.contextPath}/rendre/save" method="post">
+    <form action="${pageContext.request.contextPath}/prolonger/stockParams" method="post">
         
         <label>ID du pret :</label>
         <input type="number" name="id_pret"/><br/>
@@ -34,7 +31,7 @@
         <label>Surplus de jours :</label>
         <input type="number" name="surplus_jours"/><br/>
 
-        <button type="submit">Confirmer le retour</button>
+        <button type="submit">Confirmer le prolongement</button>
 
     </form>
 

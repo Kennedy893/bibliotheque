@@ -19,8 +19,8 @@ import com.projet.service.*;
 @RequestMapping("/prolonger")
 public class ProlongerController 
 {
-    @Autowired
-    private RetourLivreService retourLivreService;
+    // @Autowired
+    // private RetourLivreService retourLivreService;
     @Autowired
     private AdherentService adherentService;
     @Autowired
@@ -33,6 +33,8 @@ public class ProlongerController
     private StatutPretService statutPretService;
     @Autowired
     private StatutQuotaService statutQuotaService;
+    @Autowired
+    private ProlongementService prolongementService;
 
     @GetMapping("/home")
     public String home(Model model) 
@@ -40,5 +42,57 @@ public class ProlongerController
         model.addAttribute("listePrets", pretService.findAllWithAdherentAndExemplaireAndLivre());
         return "prolonger/home";
     }
+
+    @PostMapping("/stockParams")
+    public String stockParams(
+        @RequestParam("id_pret") int idPret,
+        @RequestParam("surplus_jours") int surplusJours,
+        Model model
+    )
+    {
+        model.addAttribute("id_pret", idPret);
+        model.addAttribute("surplus_jours", surplusJours);
+        return "bibliothecaire/confirmation-prolongement";
+    }
+
+    @PostMapping("/confirmation")
+    public String confirmation(
+        @RequestParam("id_pret") int idPret,
+        @RequestParam("surplus") int surplusJours,
+        @RequestParam("daty") String date_prolongement,
+        Model model
+    )
+    {
+        Pret pret = pretService.findByIdWithAdherentAndTypeAdherent(idPret);
+        // Conversion en Date
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date dateProl = null;
+        try {
+            dateProl = sdf.parse(date_prolongement);
+        } catch (Exception e) {
+            e.printStackTrace();
+            model.addAttribute("message", "Erreur de format de date");
+            model.addAttribute("messageType", "error");
+            return "prolonger/home";
+        }
+
+        // Save dans PROLONGEMENT
+        Prolongement prolongement = new Prolongement();
+        prolongement.setPret(pret);
+        prolongement.setJours_supplementaires(surplusJours);
+        prolongement.setDaty(dateProl);
+        prolongementService.save(prolongement);
+
+        // Update de la date retour dans PRET
+        long millisRetour = dateProl.getTime() + (surplusJours * 24L * 60 * 60 * 1000);
+        Date newRetour = new Date(millisRetour);
+        pretService.updateDateRetourPrevuById(idPret, newRetour);
+        model.addAttribute("message", "Pret prolonge avec succes");
+        model.addAttribute("messageType", "success");
+
+        return "/prolonger/home";
+        
+    }
+    
 
 }
