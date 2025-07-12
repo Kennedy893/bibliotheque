@@ -86,7 +86,7 @@ public class PreterController
             return "preter/home";
         }
 
-        StatutQuota statutQuota = statutQuotaService.findByAdherentId(idAdherent).orElse(null);
+        StatutQuota statutQuota = statutQuotaService.findTopByAdherentIdOrderByIdDesc(idAdherent).orElse(null);
         if (statutQuota != null && statutQuota.getQuota() <= 0) 
         {
             model.addAttribute("message", "Quota de pret atteint pour cet adherent");
@@ -109,19 +109,6 @@ public class PreterController
         if (historique != null && historique.isPenalised()) 
         {
             model.addAttribute("message", "L'adherent est actuellement penalise et ne peut pas emprunter de livres");
-            model.addAttribute("messageType", "error");
-            return "preter/home";
-        }
-
-        // Mise a jour du quota
-        if (statutQuota != null) 
-        {
-            statutQuota.setQuota(statutQuota.getQuota() - 1);
-            statutQuotaService.save(statutQuota);
-        } 
-        else 
-        {
-            model.addAttribute("message", "Statut de quota non trouve pour l'adherent");
             model.addAttribute("messageType", "error");
             return "preter/home";
         }
@@ -149,6 +136,22 @@ public class PreterController
         statutPret.setDaty(dateP);
         statutPret.setPret(pret);
         statutPretService.save(statutPret);
+
+        // Mise a jour du quota
+        if (statutQuota != null) 
+        {
+            StatutQuota sq = new StatutQuota();
+            sq.setAdherent(adherent);
+            sq.setQuota(statutQuota.getQuota() - 1);
+            sq.setDaty(dateP);
+            statutQuotaService.save(sq);
+        } 
+        else 
+        {
+            model.addAttribute("message", "Statut de quota non trouve pour l'adherent");
+            model.addAttribute("messageType", "error");
+            return "preter/home";
+        }
 
 
         model.addAttribute("message", "Pret enregistre avec succes");
