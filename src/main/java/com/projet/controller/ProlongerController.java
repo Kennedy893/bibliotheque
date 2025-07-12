@@ -35,6 +35,8 @@ public class ProlongerController
     private StatutQuotaService statutQuotaService;
     @Autowired
     private ProlongementService prolongementService;
+    @Autowired
+    private InscriptionService inscriptionService;
 
     @GetMapping("/home")
     public String home(Model model) 
@@ -83,7 +85,18 @@ public class ProlongerController
             return "prolonger/home";
         }
 
-        // Verfication si l'adherent est actif
+        // Verfication si l'adherent est actif pendant la duree
+        Date dateRetourPrevu2 = pret.getDate_retour_prevu();
+        long millisRetour2 = dateRetourPrevu2.getTime() + (surplusJours * 24L * 60 * 60 * 1000);
+        Date newRetour2 = new Date(millisRetour2);
+        Inscription inscription = inscriptionService.findByAdherentId(pret.getAdherent().getId());
+        Date exp = inscription.getDate_expiration();
+        if (exp.before(newRetour2)) 
+        {
+            model.addAttribute("message", "L'adherent n'est plus actif pendant cette date");
+            model.addAttribute("messageType", "error");
+            return "prolonger/home";
+        }
 
         // Save dans PROLONGEMENT
         Prolongement prolongement = new Prolongement();
