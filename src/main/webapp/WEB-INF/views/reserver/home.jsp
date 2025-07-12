@@ -31,7 +31,7 @@
         <label>Date de reservation :</label>
         <input type="date" name="date_reservation"/><br/>
 
-        <button type="submit">Confirmer le prolongement</button>
+        <button type="submit">CONFIRMER la reservation</button>
 
     </form>
 

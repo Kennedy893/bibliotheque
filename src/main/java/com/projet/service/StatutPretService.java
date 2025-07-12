@@ -2,6 +2,7 @@ package com.projet.service;
 
 import com.projet.entity.Pret;
 import com.projet.entity.StatutPret;
+import com.projet.entity.StatutQuota;
 import com.projet.repository.StatutPretRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,5 +30,9 @@ public class StatutPretService {
     public StatutPret findByPret(Pret pret) 
     {
         return statutPretRepository.findByPret(pret);
+    }
+    public Optional<StatutPret> findTopByPretIdOrderByIdDesc(int pretId)
+    {
+        return statutPretRepository.findTopByPretIdOrderByIdDesc(pretId);
     }
 }

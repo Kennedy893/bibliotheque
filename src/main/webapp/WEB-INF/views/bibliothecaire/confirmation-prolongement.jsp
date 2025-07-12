@@ -14,6 +14,12 @@
 <body>
     <h2>Confirmation du prolongement</h2>
 
+    <c:if test="${not empty refus}">
+        <div class="alert-danger">
+            ${refus}
+        </div>
+    </c:if>
+
     <form action="${pageContext.request.contextPath}/prolonger/confirmation" method="get">
         <label>ID du pret a prolonger :</label>
         <input type="number" value="${id_pret}" name="id_pret"/><br/>
@@ -24,7 +30,10 @@
         <label>Date de prolongement :</label>
         <input type="date" name="daty"/><br/>
 
-        <button type="submit">Confirmer le prolongement</button>
+        <button type="submit">CONFIRMER le prolongement</button>
+    </form>
+    <form action="${pageContext.request.contextPath}/prolonger/home" method="get">
+        <button type="submit">REFUSER le prolongement</button>
     </form>
 
     <h3>Liste des prets</h3>

@@ -31,9 +31,10 @@
         <label>Surplus de jours :</label>
         <input type="number" name="surplus_jours"/><br/>
 
-        <button type="submit">Confirmer le prolongement</button>
+        <button type="submit">CONFIRMER le prolongement</button>
 
     </form>
+
 
     <h3>Liste des prets</h3>
     <table width="100" border="1">
