@@ -83,6 +83,8 @@ public class ProlongerController
             return "prolonger/home";
         }
 
+        // Verfication si l'adherent est actif
+
         // Save dans PROLONGEMENT
         Prolongement prolongement = new Prolongement();
         prolongement.setPret(pret);
