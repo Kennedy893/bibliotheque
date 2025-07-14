@@ -123,8 +123,8 @@ public class PreterController
         }
 
         // Verif penalisation 
-        HistoriquesPenalisation historique = historiquesPenalisationService.findByAdherentId(idAdherent).orElse(null);
-        if (historique != null && historique.isPenalised()) 
+        HistoriquesPenalisation historique = historiquesPenalisationService.findTopByAdherentIdOrderByIdDesc(idAdherent).orElse(null);
+        if (historique != null && historique.isPenalised(dateP) && historique.isPenalised(dateR)) 
         {
             model.addAttribute("message", "L'adherent est actuellement penalise et ne peut pas emprunter de livres");
             model.addAttribute("messageType", "error");

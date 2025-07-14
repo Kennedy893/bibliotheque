@@ -32,6 +32,9 @@
         <input type="date" name="date_reservation"
         value="<fmt:formatDate value='${date_reservation}' pattern='yyyy-MM-dd'/>"/>
 
+        <label>Date de retour prevu :</label>
+        <input type="date" value="${date_retour}" name="date_retour"/><br/>
+
         <br>
         <button type="submit">CONFIRMER la reservation</button>
     </form>

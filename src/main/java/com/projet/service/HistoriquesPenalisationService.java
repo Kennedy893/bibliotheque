@@ -29,4 +29,8 @@ public class HistoriquesPenalisationService {
     {
         return Optional.ofNullable(historiquesPenalisationRepository.findByAdherentId(idAdherent));
     }
+    public Optional<HistoriquesPenalisation> findTopByAdherentIdOrderByIdDesc(int idAdherent) 
+    {
+        return Optional.ofNullable(historiquesPenalisationRepository.findByAdherentId(idAdherent));
+    }
 }

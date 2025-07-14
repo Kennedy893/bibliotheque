@@ -63,9 +63,14 @@ public class HistoriquesPenalisation
         this.date_fin = date_fin;
     }
 
-    public boolean isPenalised() 
+    // public boolean isPenalised() 
+    // {
+    //     Date currentDate = new Date();
+    //     return (date_debut != null && date_fin != null) && (currentDate.after(date_debut) && currentDate.before(date_fin));
+    // }
+
+    public boolean isPenalised(Date daty) 
     {
-        Date currentDate = new Date();
-        return (date_debut != null && date_fin != null) && (currentDate.after(date_debut) && currentDate.before(date_fin));
+        return (date_debut != null && date_fin != null) && (daty.after(date_debut) && daty.before(date_fin));
     }
 }
