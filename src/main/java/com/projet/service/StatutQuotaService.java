@@ -4,6 +4,8 @@ import com.projet.entity.StatutQuota;
 import com.projet.repository.StatutQuotaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.lang.StackWalker.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,5 +29,9 @@ public class StatutQuotaService {
     public Optional<StatutQuota> findByAdherentId(int idAdherent) 
     {
         return Optional.ofNullable(statutQuotaRepository.findByAdherentId(idAdherent));
+    }
+    public Optional<StatutQuota> findTopByAdherentIdOrderByIdDesc(int adherentId)
+    {
+        return statutQuotaRepository.findTopByAdherentIdOrderByIdDesc(adherentId);
     }
 }

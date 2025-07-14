@@ -9,5 +9,6 @@
 <body>
     <h2>Accueil ADHERENT</h2>
     <a href="${pageContext.request.contextPath}/prolonger/home">Prolonger un pret</a>
+    <a href="${pageContext.request.contextPath}/reserver/home">Reserver un livre</a>
 </body>
 </html>

@@ -48,4 +48,9 @@ public class PretService {
             throw new RuntimeException("Pret not found with id: " + id);
         }
     }
+
+    public Pret findTopByExemplaireIdOrderByIdDesc(int exemplaireId)
+    {
+        return pretRepository.findTopByExemplaireIdOrderByIdDesc(exemplaireId);
+    }
 }

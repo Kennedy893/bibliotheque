@@ -4,4 +4,5 @@ import com.projet.entity.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface LivreRepository extends JpaRepository<Livre, Integer> {
+    // Livre findByExemplaireId(int idExemplaire);
 }

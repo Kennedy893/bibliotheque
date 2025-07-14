@@ -24,4 +24,9 @@ public class ProlongementService {
     public void deleteById(int id) {
         prolongementRepository.deleteById(id);
     }
+
+    public Prolongement findByPretId(int idPret)
+    {
+        return prolongementRepository.findByPretId(idPret);
+    }
 }

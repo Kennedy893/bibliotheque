@@ -35,11 +35,16 @@ public class ProlongerController
     private StatutQuotaService statutQuotaService;
     @Autowired
     private ProlongementService prolongementService;
+    @Autowired
+    private InscriptionService inscriptionService;
+    @Autowired
+    private LivreService livreService;
 
     @GetMapping("/home")
     public String home(Model model) 
     {
         model.addAttribute("listePrets", pretService.findAllWithAdherentAndExemplaireAndLivre());
+        model.addAttribute("refus", "Pret refuse");
         return "prolonger/home";
     }
 
@@ -83,6 +88,52 @@ public class ProlongerController
             return "prolonger/home";
         }
 
+        // REGLES DE GESTION
+        // Verfication si l'adherent est actif pendant la duree
+        Date dateRetourPrevu2 = pret.getDate_retour_prevu();
+        long millisRetour2 = dateRetourPrevu2.getTime() + (surplusJours * 24L * 60 * 60 * 1000);
+        Date newRetour2 = new Date(millisRetour2);
+        Inscription inscription = inscriptionService.findByAdherentId(pret.getAdherent().getId());
+        Date exp = inscription.getDate_expiration();
+        if (exp.before(newRetour2)) 
+        {
+            model.addAttribute("message", "L'adherent n'est plus actif pendant cette date");
+            model.addAttribute("messageType", "error");
+            return "prolonger/home";
+        }
+
+        // Verif s'il y avait deja un prolongement sur ce pret
+        Prolongement p = prolongementService.findByPretId(idPret);
+        if (p != null) 
+        {
+            model.addAttribute("message", "Il y avait deja un prolongement sur ce pret");
+            model.addAttribute("messageType", "error");
+            return "prolonger/home";
+        }
+
+        // Verif quota
+        StatutQuota statutQuota = statutQuotaService.findTopByAdherentIdOrderByIdDesc(pret.getAdherent().getId()).orElse(null);
+        int nbQuota = statutQuota.getQuota();
+        if (nbQuota <= 0) 
+        {
+            model.addAttribute("message", "Le nombre de quota de l'adehrent est epuise");
+            model.addAttribute("messageType", "error");
+            return "prolonger/home";
+        }
+
+        // Verif nb exemplaire
+        Exemplaire exe = exemplaireService.findById(pret.getExemplaire().getId()).orElse(null);
+        Livre livre = exe.getLivre();
+        Exemplaire exemp = exemplaireService.findTopByLivreIdOrderByIdDesc(livre.getId()).orElse(null);
+        if (exemp.getNb_exemplaires() <= 0) 
+        {
+            model.addAttribute("message", "Il n'y a plus d'exemplaire disponible");
+            model.addAttribute("messageType", "error");
+            return "prolonger/home";
+        }
+
+        // //////////////
+
         // Save dans PROLONGEMENT
         Prolongement prolongement = new Prolongement();
         prolongement.setPret(pret);
@@ -103,11 +154,25 @@ public class ProlongerController
         pretService.updateDateRetourPrevuById(idPret, newRetour);
 
         // Update du statut du pret
-        StatutPret statutPret = statutPretService.findByPret(pret);
-        statutPret.setDaty(dateProl);
-        statutPret.setStatut(2); // 2: Prolongé
-        statutPret.setPret(pret);
-        statutPretService.save(statutPret);
+        StatutPret sp = new StatutPret();
+        sp.setDaty(dateProl);
+        sp.setStatut(2); // 2: Prolongé
+        sp.setPret(pret);
+        statutPretService.save(sp);
+
+        // Update du statut de quota
+        StatutQuota sq = new StatutQuota();
+        sq.setDaty(dateProl);
+        sq.setQuota(nbQuota-1);
+        sq.setAdherent(pret.getAdherent());
+        statutQuotaService.save(sq);
+
+        // Update nb exemplaire
+        Exemplaire e = new Exemplaire();
+        e.setDaty(dateProl);
+        e.setLivre(livre); 
+        e.setNb_exemplaires(exemp.getNb_exemplaires());
+        exemplaireService.save(e);
 
         model.addAttribute("message", "Pret prolonge avec succes");
         model.addAttribute("messageType", "success");

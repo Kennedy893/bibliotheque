@@ -8,7 +8,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-public interface PretRepository extends JpaRepository<Pret, Integer> {
+public interface PretRepository extends JpaRepository<Pret, Integer> 
+{
+    Pret findTopByExemplaireIdOrderByIdDesc(int exemplaireId);
+
     @Query("SELECT p FROM Pret p JOIN FETCH p.adherent JOIN FETCH p.exemplaire e JOIN FETCH e.livre")
     List<Pret> findAllWithAdherentAndExemplaireAndLivre();
 

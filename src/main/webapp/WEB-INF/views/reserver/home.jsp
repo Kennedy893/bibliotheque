@@ -8,8 +8,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pret - Accueil</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/hello.css">
+    <title>Reservation - Accueil</title>
+    <link rel="stylesheet" href="assets/css/hello.css">
 </head>
 <body>
     <c:if test="${not empty message}">
@@ -18,9 +18,9 @@
         </div>
     </c:if>
 
-    <h2>Preter un exemplaire</h2>
+    <h2>Reserver un livre</h2>
 
-    <form action="${pageContext.request.contextPath}/preter/save" method="post">
+    <form action="${pageContext.request.contextPath}/reserver/stockParams" method="post">
         
         <label>ID de l'adherent :</label>
         <input type="number" name="id_adherent"/><br/>
@@ -28,15 +28,14 @@
         <label>ID de l'exemplaire :</label>
         <input type="number" name="id_exemplaire"/><br/>
 
-        <label>Date de pret :</label>
-        <input type="date" name="date_pret"/><br/>
+        <label>Date de reservation :</label>
+        <input type="date" name="date_reservation"/><br/>
 
-        <label>Date de retour prevu :</label>
-        <input type="date" name="date_retour_prevu"/><br/>
-
-        <button type="submit">Confirmer le pret</button>
+        <button type="submit">Confirmer la RESERVATION</button>
 
     </form>
+
+<hr/>
 
     <h3>Liste des adherents</h3>
     <table width="200" border="1">
@@ -56,22 +55,32 @@
         </tbody>
     </table>
 
-    <h3>Liste des exemplaires</h3>
-    <table width="200" border="1">
-        <thead>
-            <tr>
-                <th>ID Exemplaire</th>
-                <th>Titre du livre</th>
-            </tr>
-        </thead>
-        <tbody>
-            <c:forEach items="${listeExemplaires}" var="exemplaire">
+<br/>
+
+    <h3>Liste des exemplaires encore indisponibles</h3>
+    <c:if test="${empty listeExemplaires}">
+        <p>Aucun exemplaire indisponible pour le moment</p>
+    </c:if>
+
+    <c:if test="${not empty listeExemplaires}">
+        <table width="200" border="1">
+            <thead>
                 <tr>
-                    <td>${exemplaire.id}</td>
-                    <td>${exemplaire.livre.titre}</td>
+                    <th>ID Exemplaire</th>
+                    <th>Titre du livre</th>
                 </tr>
-            </c:forEach>
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                <c:forEach items="${listeExemplaires}" var="exemplaire">
+                    <tr>
+                        <td>${exemplaire.id}</td>
+                        <td>${exemplaire.livre.titre}</td>
+                    </tr>
+                </c:forEach>
+            </tbody>
+        </table>
+    </c:if>
+
+
 </body>
 </html>
