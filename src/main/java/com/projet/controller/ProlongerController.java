@@ -37,6 +37,8 @@ public class ProlongerController
     private ProlongementService prolongementService;
     @Autowired
     private InscriptionService inscriptionService;
+    @Autowired
+    private LivreService livreService;
 
     @GetMapping("/home")
     public String home(Model model) 
@@ -119,6 +121,17 @@ public class ProlongerController
             return "prolonger/home";
         }
 
+        // Verif nb exemplaire
+        Exemplaire exe = exemplaireService.findById(pret.getExemplaire().getId()).orElse(null);
+        Livre livre = exe.getLivre();
+        Exemplaire exemp = exemplaireService.findTopByLivreIdOrderByIdDesc(livre.getId()).orElse(null);
+        if (exemp.getNb_exemplaires() <= 0) 
+        {
+            model.addAttribute("message", "Il n'y a plus d'exemplaire disponible");
+            model.addAttribute("messageType", "error");
+            return "prolonger/home";
+        }
+
         // //////////////
 
         // Save dans PROLONGEMENT
@@ -153,6 +166,13 @@ public class ProlongerController
         sq.setQuota(nbQuota-1);
         sq.setAdherent(pret.getAdherent());
         statutQuotaService.save(sq);
+
+        // Update nb exemplaire
+        Exemplaire e = new Exemplaire();
+        e.setDaty(dateProl);
+        e.setLivre(livre); 
+        e.setNb_exemplaires(exemp.getNb_exemplaires() - 1);
+        exemplaireService.save(e);
 
         model.addAttribute("message", "Pret prolonge avec succes");
         model.addAttribute("messageType", "success");

@@ -37,6 +37,8 @@ public class PreterController
     private HistoriquesPenalisationService historiquesPenalisationService;
     @Autowired
     private StatutPretService statutPretService;
+    @Autowired
+    private LivreService livreService;
 
     @GetMapping("/home")
     public String home(Model model) 
@@ -71,6 +73,18 @@ public class PreterController
         }
 
         // REGLES DE GESTION
+        // Verif nb exemplaire dispo
+        Exemplaire exe = exemplaireService.findById(idExemplaire).orElse(null);
+        Livre livre = exe.getLivre();
+        Exemplaire exemp = exemplaireService.findTopByLivreIdOrderByIdDesc(livre.getId()).orElse(null);
+        if (exemp.getNb_exemplaires() <= 0) 
+        {
+            model.addAttribute("message", "Il n'y a plus d'exemplaire disponible");
+            model.addAttribute("messageType", "error");
+            return "preter/home";
+        }
+
+        // Verif date pret invalide
         if (dateP == null || dateR == null || dateP.after(dateR)) 
         {
             model.addAttribute("message", "Date de pret ou de retour invalide");
@@ -78,6 +92,7 @@ public class PreterController
             return "preter/home";
         }
 
+        // Activite de l'adherent
         Inscription inscription = inscriptionService.findByAdherentId(idAdherent);
         if (inscription == null || !inscription.isActive(dateP)) 
         {
@@ -86,6 +101,7 @@ public class PreterController
             return "preter/home";
         }
 
+        // Verif nb quota
         StatutQuota statutQuota = statutQuotaService.findTopByAdherentIdOrderByIdDesc(idAdherent).orElse(null);
         if (statutQuota != null && statutQuota.getQuota() <= 0) 
         {
@@ -94,6 +110,7 @@ public class PreterController
             return "preter/home";
         }
 
+        // Autorisation du livre selon le type d'adherent
         LivreTypeAdherent livreTypeAdherent = livreTypeAdherentService.findByLivreAndTypeAdherent(
             exemplaireService.findById(idExemplaire).orElse(null).getLivre(),
             adherentService.findById(idAdherent).orElse(null).getType_adherent()
@@ -105,6 +122,7 @@ public class PreterController
             return "preter/home";
         }
 
+        // Verif penalisation 
         HistoriquesPenalisation historique = historiquesPenalisationService.findByAdherentId(idAdherent).orElse(null);
         if (historique != null && historique.isPenalised()) 
         {
@@ -112,6 +130,8 @@ public class PreterController
             model.addAttribute("messageType", "error");
             return "preter/home";
         }
+
+        // ////////////////////////
 
         // Enregistrement du pret
         Exemplaire exemplaire = exemplaireService.findById(idExemplaire).orElse(null);
@@ -152,6 +172,13 @@ public class PreterController
             model.addAttribute("messageType", "error");
             return "preter/home";
         }
+
+        // Mise a jour nb exemplaire
+        Exemplaire e = new Exemplaire();
+        e.setDaty(dateP);
+        e.setLivre(livre); 
+        e.setNb_exemplaires(exemp.getNb_exemplaires() - 1);
+        exemplaireService.save(e);
 
 
         model.addAttribute("message", "Pret enregistre avec succes");

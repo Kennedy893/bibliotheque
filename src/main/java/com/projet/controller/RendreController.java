@@ -33,6 +33,8 @@ public class RendreController
     private StatutPretService statutPretService;
     @Autowired
     private StatutQuotaService statutQuotaService;
+    @Autowired 
+    private LivreService livreService;
     
     @GetMapping("/home")
     public String home(Model model) 
@@ -66,6 +68,7 @@ public class RendreController
         Pret pret = pretService.findByIdWithAdherentAndTypeAdherent(idPret);
 
         // REGLES DE GESTION
+        // Verif si le livre a deja ete rendu
         RetourLivre retourLivre = rendreService.findByPret(pret);
         if (retourLivre != null) 
         {
@@ -75,6 +78,7 @@ public class RendreController
             return "rendre/home";
         }
 
+        // Verif si le pret existe
         if (pret == null) 
         {
             model.addAttribute("message", "Prêt introuvable");
@@ -82,6 +86,8 @@ public class RendreController
             model.addAttribute("listePrets", pretService.findAllWithAdherentAndExemplaireAndLivre());
             return "rendre/home";
         }
+
+        // ////////////////////////////////
 
         // MAJ Penalisation
         Date retourPrevu = pret.getDate_retour_prevu();
@@ -109,17 +115,29 @@ public class RendreController
 
         // MAJ Statut_pret
         StatutPret statutPret = new StatutPret();
-        statutPret.setId(1); // 1 = Rendu
+        statutPret.setStatut(1); // 1 = Rendu
         statutPret.setPret(pret);
         statutPret.setDaty(dateRetourDate);
         statutPretService.save(statutPret);
 
         // MAJ Quota
+        StatutQuota sq = statutQuotaService.findTopByAdherentIdOrderByIdDesc(pret.getAdherent().getId()).orElse(null);
         StatutQuota statutQuota = new StatutQuota();
         statutQuota.setDaty(dateRetourDate);
         statutQuota.setAdherent(pret.getAdherent());
-        statutQuota.setQuota(pret.getAdherent().getType_adherent().getQuota() + 1); 
+        statutQuota.setQuota(sq.getQuota() + 1); 
         statutQuotaService.save(statutQuota);
+
+        // MAJ Nb exemplaire
+        Exemplaire exe = exemplaireService.findById(pret.getExemplaire().getId()).orElse(null);
+        Livre livre = exe.getLivre();
+        Exemplaire e = exemplaireService.findTopByLivreIdOrderByIdDesc(livre.getId()).orElse(null);
+        int nbEx = e.getNb_exemplaires();
+        Exemplaire ex = new Exemplaire();
+        ex.setDaty(dateRetourDate);
+        ex.setLivre(livre);
+        ex.setNb_exemplaires(nbEx + 1);
+        exemplaireService.save(ex);
 
 
         // Enregistrement du retour

@@ -1,6 +1,7 @@
 package com.projet.service;
 
 import com.projet.entity.Exemplaire;
+import com.projet.entity.StatutQuota;
 import com.projet.repository.ExemplaireRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,5 +27,9 @@ public class ExemplaireService {
     }
     public List<Exemplaire> findAllWithLivre() {
         return exemplaireRepository.findAllWithLivre();
+    }
+    public Optional<Exemplaire> findTopByLivreIdOrderByIdDesc(int livreId)
+    {
+        return exemplaireRepository.findTopByLivreIdOrderByIdDesc(livreId);
     }
 }
