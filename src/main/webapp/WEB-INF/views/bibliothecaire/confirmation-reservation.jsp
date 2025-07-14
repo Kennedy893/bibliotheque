@@ -1,6 +1,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
 <!DOCTYPE html>
@@ -8,56 +9,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reservation - Accueil</title>
+    <title>Confirmation de la reservation</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/hello.css">
 </head>
 <body>
-    <c:if test="${not empty message}">
-        <div class="${messageType == 'error' ? 'alert-danger' : 'alert-success'}">
-            ${message}
+    <h2>Confirmation de la reservation</h2>
+
+    <c:if test="${not empty refus}">
+        <div class="alert-danger">
+            ${refus}
         </div>
     </c:if>
 
-    <h2>Reserver un livre</h2>
-
-    <form action="${pageContext.request.contextPath}/reserver/stockParams" method="post">
-        
+    <form action="${pageContext.request.contextPath}/reserver/confirmation" method="get">
         <label>ID de l'adherent :</label>
-        <input type="number" name="id_adherent"/><br/>
+        <input type="number" value="${id_adherent}" name="id_adherent"/><br/>
 
         <label>ID de l'exemplaire :</label>
-        <input type="number" name="id_exemplaire"/><br/>
+        <input type="number" value="${id_exemplaire}" name="id_exemplaire"/><br/>
 
         <label>Date de reservation :</label>
-        <input type="date" name="date_reservation"/><br/>
+        <input type="date" name="date_reservation"
+        value="<fmt:formatDate value='${date_reservation}' pattern='yyyy-MM-dd'/>"/>
 
-        <button type="submit">Confirmer la RESERVATION</button>
-
+        <br>
+        <button type="submit">CONFIRMER la reservation</button>
+    </form>
+    <br>
+    <form action="${pageContext.request.contextPath}/reserver/home" method="get">
+        <button type="submit">REFUSER la reservation</button>
     </form>
 
-<hr/>
+<hr>
 
-    <h3>Liste des adherents</h3>
-    <table width="200" border="1">
-        <thead>
-            <tr>
-                <th>ID Adherent</th>
-                <th>Nom</th>
-            </tr>
-        </thead>
-        <tbody>
-            <c:forEach items="${listeAdherents}" var="adherent">
-                <tr>
-                    <td>${adherent.id}</td>
-                    <td>${adherent.nom}</td>
-                </tr>
-            </c:forEach>
-        </tbody>
-    </table>
-
-<br/>
-
-    <h3>Liste des exemplaires encore indisponibles</h3>
+    <h3>Liste des exemplaires</h3>
     <c:if test="${empty listeExemplaires}">
         <p>Aucun exemplaire indisponible pour le moment</p>
     </c:if>
@@ -80,7 +65,5 @@
             </tbody>
         </table>
     </c:if>
-
-
 </body>
 </html>

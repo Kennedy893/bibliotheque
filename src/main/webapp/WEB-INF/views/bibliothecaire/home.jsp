@@ -11,6 +11,7 @@
     <a href="${pageContext.request.contextPath}/login/inscription">Inscription</a>
     <a href="${pageContext.request.contextPath}/preter/home">Enregistrement d'un pret</a>
     <a href="${pageContext.request.contextPath}/rendre/home">Rendre un livre</a>
-    <a href="${pageContext.request.contextPath}/bibliothecaire/confirmation">Confirmer un prolongement de pret</a>
+    <a href="${pageContext.request.contextPath}/bibliothecaire/confirmation-prolongement">Confirmer un prolongement de pret</a>
+    <a href="${pageContext.request.contextPath}/bibliothecaire/confirmation-reservation">Confirmer une reservation de livre</a>
 </body>
 </html>

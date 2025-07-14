@@ -32,4 +32,8 @@ public class ExemplaireService {
     {
         return exemplaireRepository.findTopByLivreIdOrderByIdDesc(livreId);
     }
+    public List<Exemplaire> findAllExemplairesIndisponibles()
+    {
+        return exemplaireRepository.findAllExemplairesIndisponibles();
+    }
 }
