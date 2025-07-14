@@ -39,7 +39,7 @@
     </form>
 
     <h3>Liste des adherents</h3>
-    <table width="100" border="1">
+    <table width="200" border="1">
         <thead>
             <tr>
                 <th>ID Adherent</th>
@@ -57,7 +57,7 @@
     </table>
 
     <h3>Liste des exemplaires</h3>
-    <table width="100" border="1">
+    <table width="200" border="1">
         <thead>
             <tr>
                 <th>ID Exemplaire</th>

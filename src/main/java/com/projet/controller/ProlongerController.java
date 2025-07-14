@@ -171,7 +171,7 @@ public class ProlongerController
         Exemplaire e = new Exemplaire();
         e.setDaty(dateProl);
         e.setLivre(livre); 
-        e.setNb_exemplaires(exemp.getNb_exemplaires() - 1);
+        e.setNb_exemplaires(exemp.getNb_exemplaires());
         exemplaireService.save(e);
 
         model.addAttribute("message", "Pret prolonge avec succes");

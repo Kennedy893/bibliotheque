@@ -36,7 +36,7 @@
     </form>
 
     <h3>Liste des prets</h3>
-    <table width="100" border="1">
+    <table width="200" border="1">
         <thead>
             <tr>
                 <th>ID Pret</th>
