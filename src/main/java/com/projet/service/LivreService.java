@@ -28,4 +28,9 @@ public class LivreService {
     // {
     //     return livreRepository.findByExemplaireId(id_exemplaire);
     // }
+
+    public Optional<Livre> findByIdWithGenres(int id)
+    {
+        return livreRepository.findByIdWithGenres(id);
+    }
 }
