@@ -27,6 +27,14 @@ public class WebApiController
     private LivreService livreService;
     @Autowired 
     private ExemplaireService exemplaireService;
+    @Autowired
+    private AdherentService adherentService;
+    @Autowired
+    private StatutQuotaService statutQuotaService;
+    @Autowired 
+    private InscriptionService inscriptionService;
+    @Autowired
+    private HistoriquesPenalisationService historiquesPenalisationService;
 
     @GetMapping("/livre/{id}")
     public ResponseEntity<LivreDTO> getInfosLivreById(@PathVariable int id) 
@@ -44,6 +52,38 @@ public class WebApiController
 
         LivreDTO dto = new LivreDTO(livre, nbExemplaires);
         return ResponseEntity.ok(dto);
+    }
+
+    @GetMapping("/adherent/{id}")
+    public ResponseEntity<AdherentDTO> getInfosAdherentById(@PathVariable int id)
+    {
+        Adherent adherent = adherentService.findByIdWithTypeAdherent(id).orElse(null);
+        if (adherent == null)
+        {
+            return ResponseEntity.notFound().build();
+        }
+
+        // NbQuota
+        int nbQuota = statutQuotaService
+                .findTopByAdherentIdOrderByIdDesc(id)
+                .map(StatutQuota::getQuota)
+                .orElse(0);
+
+        AdherentDTO dto = new AdherentDTO(adherent, nbQuota);
+
+        // Abonnement
+        Date today = new Date();
+        Inscription inscription = inscriptionService.findByAdherentId(id);
+        boolean abonnement = inscription != null && inscription.isActive(today);
+        dto.setAbonnement(abonnement);
+
+        // Penalisation
+        HistoriquesPenalisation historiquesPenalisation = historiquesPenalisationService.findTopByAdherentIdOrderByIdDesc(id).orElse(null);
+        boolean penalisation = historiquesPenalisation != null && historiquesPenalisation.isPenalised(today);
+        dto.setPenalisation(penalisation);
+
+        return ResponseEntity.ok(dto);
+        
     }
 
 }
