@@ -36,7 +36,6 @@ public class WebApiController
         {
             return ResponseEntity.notFound().build();
         }
-        // LivreDTO dto = new LivreDTO(livre);
 
         int nbExemplaires = exemplaireService
                 .findTopByLivreIdOrderByIdDesc(id)
