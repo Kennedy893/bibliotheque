@@ -49,6 +49,28 @@ public class PreterController
         return "preter/home";
     }
 
+    @GetMapping("/all")
+    public String allPrets(Model model)
+    {
+        model.addAttribute("listePrets", pretService.findAllWithAdherentAndExemplaireAndLivre());
+        model.addAttribute("listeStatutPret", statutPretService.findAll());
+        return "preter/liste";
+    }
+
+    @GetMapping("/allExemplaires")
+    public String allExemplaires(Model model)
+    {
+        model.addAttribute("listeExemplaires", exemplaireService.findAllWithLivre());
+        return "exemplaire/liste";
+    }
+
+    @GetMapping("/allStatutQuota")
+    public String allStatutQuota(Model model)
+    {
+        model.addAttribute("listeQuotas", statutQuotaService.findAllWithAdherent());
+        return "quota/liste";
+    }
+
     @PostMapping("/save")
     public String savePret(
         @RequestParam("id_exemplaire") int idExemplaire,

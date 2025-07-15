@@ -34,4 +34,8 @@ public class StatutQuotaService {
     {
         return statutQuotaRepository.findTopByAdherentIdOrderByIdDesc(adherentId);
     }
+    public List<StatutQuota> findAllWithAdherent()
+    {
+        return statutQuotaRepository.findAllWithAdherent();
+    }
 }

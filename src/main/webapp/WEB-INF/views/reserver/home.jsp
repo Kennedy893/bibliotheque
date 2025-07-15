@@ -9,7 +9,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reservation - Accueil</title>
-    <link rel="stylesheet" href="assets/css/hello.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/hello.css">
 </head>
 <body>
     <c:if test="${not empty message}">

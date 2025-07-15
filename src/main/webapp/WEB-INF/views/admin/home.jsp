@@ -9,5 +9,9 @@
 <body>
     <h2>Accueil ADMIN</h2>
     <a href="${pageContext.request.contextPath}/preter/all">Liste de tous les prets</a>
+    <br>
+    <a href="${pageContext.request.contextPath}/preter/allExemplaires">Evolution des nb exemplaires</a>
+    <br>
+    <a href="${pageContext.request.contextPath}/preter/allStatutQuota">Evolution des statuts de quota</a>
 </body>
 </html>
