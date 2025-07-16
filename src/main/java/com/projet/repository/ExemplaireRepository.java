@@ -28,6 +28,15 @@ public interface ExemplaireRepository extends JpaRepository<Exemplaire, Integer>
     """)
     List<Exemplaire> findAllExemplairesIndisponibles();
 
+    @Query("""
+    SELECT e FROM Exemplaire e
+    JOIN FETCH e.livre
+    WHERE e.id IN (
+        SELECT MAX(e2.id) FROM Exemplaire e2 GROUP BY e2.livre.id
+    )
+    AND e.nb_exemplaires > 0
+    """)
+    List<Exemplaire> findAllExemplairesDisponibles();
 
     Optional<Exemplaire> findTopByLivreIdOrderByIdDesc(int livreId);
 }

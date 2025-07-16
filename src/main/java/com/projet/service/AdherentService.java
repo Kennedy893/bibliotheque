@@ -27,4 +27,9 @@ public class AdherentService {
     public Adherent findByNomAndMdp(String nom, String mdp) {
         return adherentRepository.findByNomAndMdp(nom, mdp);
     }
+
+    public Optional<Adherent> findByIdWithTypeAdherent(int id)
+    {
+        return adherentRepository.findByIdWithTypeAdherent(id);
+    }
 }
